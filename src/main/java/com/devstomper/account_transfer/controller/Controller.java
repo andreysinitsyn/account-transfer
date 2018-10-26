@@ -54,7 +54,8 @@ public class Controller {
     public Response handleRetrieveAccountByIdRequest(@PathParam("accountId") String accountId) {
         try {
             Account account = service.retrieveAccountById(accountId);
-            return account != null ? Response.ok(account).build() : Response.status(Response.Status.NOT_FOUND).build();
+            return account != null ?
+                    Response.ok(account).build() : Response.serverError().status(404).entity("").build();
         } catch (Exception e) {
             return Response.serverError().build();
         }
@@ -64,7 +65,7 @@ public class Controller {
      * Handle
      * @return {@link Response} response with requested account details
      */
-    @POST
+    @PUT
     @Path(("/transfer"))
     @Consumes(MediaType.APPLICATION_JSON)
     public Response handleTransferTransactionRequest(TransferTransaction transaction) {

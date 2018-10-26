@@ -13,6 +13,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
@@ -86,6 +87,8 @@ public class TestInMemoryAccountingService  {
         HttpGet request = new HttpGet(uri);
         HttpResponse response = client.execute(request);
         assertEquals(404, response.getStatusLine().getStatusCode());
+        String content = EntityUtils.toString(response.getEntity());
+        assertEquals("", content);
     }
 
     @Test
@@ -94,7 +97,7 @@ public class TestInMemoryAccountingService  {
         TransferTransaction transferTransaction = new TransferTransaction("3", "4", BigDecimal.valueOf(100));
         String body = mapper.writeValueAsString(transferTransaction);
         StringEntity entity = new StringEntity(body);
-        HttpPost request = new HttpPost(uri);
+        HttpPut request = new HttpPut(uri);
         request.setHeader("Content-type", "application/json");
         request.setEntity(entity);
         HttpResponse response = client.execute(request);
@@ -112,7 +115,7 @@ public class TestInMemoryAccountingService  {
                 "4", BigDecimal.valueOf(700).setScale(2, BigDecimal.ROUND_UP));
         String body = mapper.writeValueAsString(transferTransaction);
         StringEntity entity = new StringEntity(body);
-        HttpPost request = new HttpPost(uri);
+        HttpPut request = new HttpPut(uri);
         request.setHeader("Content-type", "application/json");
         request.setEntity(entity);
         HttpResponse response = client.execute(request);
