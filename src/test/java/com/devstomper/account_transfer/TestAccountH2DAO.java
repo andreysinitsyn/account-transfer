@@ -7,12 +7,15 @@ import com.devstomper.account_transfer.model.Account;
 import com.devstomper.account_transfer.model.Statement;
 import org.apache.commons.dbutils.DbUtils;
 import org.h2.tools.RunScript;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.FileReader;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.Collections;
 import java.util.List;
 
 import static com.devstomper.account_transfer.ConnectionManager.getConnection;
@@ -66,7 +69,7 @@ public class TestAccountH2DAO {
     public void shouldUpdateAccount() throws Exception {
         long id = 3;
         Account account = new Account(id, BigDecimal.valueOf(600));
-        dao.update(account);
+        dao.batchUpdate(Collections.singletonList(account));
         Account updatedAccount = dao.retrieve(String.valueOf(id));
         assertEquals(account.getBalance().setScale(2, BigDecimal.ROUND_UP), updatedAccount.getBalance());
     }
@@ -81,7 +84,7 @@ public class TestAccountH2DAO {
             statement.setLong(1, id);
             statement.executeQuery();
             Account accountToUpdate = new Account(id, BigDecimal.valueOf(600));
-            dao.update(accountToUpdate);
+            dao.batchUpdate(Collections.singletonList(accountToUpdate));
         } catch (Exception e) {
             connection.commit();
             assertTrue(originalAccount.getBalance().equals(dao.retrieve(String.valueOf(id)).getBalance()));

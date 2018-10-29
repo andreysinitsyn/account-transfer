@@ -62,7 +62,7 @@ public class AccountH2DAO implements GenericDao<Account> {
     }
 
     @Override
-    public void update(Account... accounts) throws Exception {
+    public void batchUpdate(List<Account> accounts) throws Exception {
         PreparedStatement updateStmt = null;
         Connection connection = null;
         try {

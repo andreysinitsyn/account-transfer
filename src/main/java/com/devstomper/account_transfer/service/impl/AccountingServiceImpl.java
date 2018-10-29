@@ -11,6 +11,7 @@ import com.devstomper.account_transfer.service.AccountingService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,7 +47,7 @@ public class AccountingServiceImpl implements AccountingService {
             Account target = retrieveAccountById(transaction.getTargetId());
             source.withdraw(transaction.getAmount());
             target.deposit(transaction.getAmount());
-            dao.update(source, target);
+            dao.batchUpdate(Arrays.asList(source, target));
             return new TransactionResult(TransactionStatus.SUCCESS);
         } catch (InsufficientBalanceException e) {
             return new TransactionResult(TransactionStatus.FAIL, e.getMessage());

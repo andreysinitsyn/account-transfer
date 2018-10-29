@@ -1,5 +1,6 @@
 package com.devstomper.account_transfer.dao;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,6 +15,10 @@ public interface GenericDao<T> {
 
     T retrieve(String id) throws Exception;
 
-    void update(T... entities) throws Exception;
+    void batchUpdate(List<T> entities) throws Exception;
+
+    default void update(T entity) throws Exception {
+        batchUpdate(Collections.singletonList(entity));
+    }
 
 }
